@@ -1,0 +1,50 @@
+name: CI Parallel Jobs
+
+on:
+    push:
+        branches: ["main"]
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Setup Node
+              uses: actions/setup-node@v4.0.3
+              with:
+                node-version: "24"
+                cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run linter
+              run: npm run lint
+
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Setup Node
+              uses: actions/setup-node@v4.0.3
+              with:
+                node-version: "20"
+                cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run tests
+              run: npm test > test_report.txt
+
+            - name: Upload a Build Artifact
+              uses: actions/upload-artifact@v7.0.0
+              with:
+                name: test_report
+                path: test_report.txt
