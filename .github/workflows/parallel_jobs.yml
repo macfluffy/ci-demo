@@ -3,6 +3,8 @@ name: CI Parallel Jobs
 on:
     push:
         branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
 jobs:
     lint:
@@ -25,6 +27,9 @@ jobs:
 
             - name: Run linter
               run: npm run lint
+
+            - name: Printing echo to see what prints
+              run: echo ${{secrets.API_KEY}}
 
     test:
         runs-on: ubuntu-latest
