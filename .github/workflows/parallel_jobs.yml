@@ -29,7 +29,7 @@ jobs:
               run: npm run lint
 
             - name: Printing echo to see what prints
-              run: echo ${{secrets.API_KEY}}
+              run: echo ${{env.API_KEY}}
 
     test:
         runs-on: ubuntu-latest
@@ -49,6 +49,9 @@ jobs:
 
             - name: Run tests
               run: npm test > test_report.txt
+
+            - name: Printing echo to see what prints
+              run: echo ${{env.API_KEY}}
 
             - name: Upload a Build Artifact
               uses: actions/upload-artifact@v7.0.0
