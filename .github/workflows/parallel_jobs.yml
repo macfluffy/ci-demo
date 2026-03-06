@@ -3,10 +3,14 @@ name: CI Parallel Jobs
 on:
     push:
         branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
 jobs:
     lint:
         runs-on: ubuntu-latest
+        env:
+            API_KEY: ${{secrets.API_KEY}}
 
         steps:
             - name: Checkout code
@@ -23,6 +27,9 @@ jobs:
 
             - name: Run linter
               run: npm run lint
+
+            - name: Printing echo to see what prints
+              run: echo ${{env.API_KEY}}
 
     test:
         runs-on: ubuntu-latest
@@ -42,6 +49,9 @@ jobs:
 
             - name: Run tests
               run: npm test > test_report.txt
+
+            - name: Printing echo to see what prints
+              run: echo ${{env.API_KEY}}
 
             - name: Upload a Build Artifact
               uses: actions/upload-artifact@v7.0.0
