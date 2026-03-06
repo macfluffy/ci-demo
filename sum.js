@@ -1,4 +1,4 @@
 function sum(a, b) {
-    return a - b;   // Incorrect on purpose
+    return a + b;
 }
 module.exports = sum;
