@@ -1,0 +1,20 @@
+name: Manual Deployment
+
+on:
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "Building application..."
+
+    deploy:
+        needs: [build]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+            - name: Deploy
+              run:
+                echo "Deploying the application's current build"
+                # Deployment script goes here
