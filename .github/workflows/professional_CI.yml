@@ -1,6 +1,8 @@
 name: Professional CI
 
 on:
+    pull_request:
+        branches: ["main"]
     push:
         branches: ["main"]
 
@@ -14,7 +16,9 @@ jobs:
                 node-version: "24"
                 cache: "npm"
             - run: npm ci
-            - run: npm run lint
+            - name: Run lint only on PR
+              if: github.event_name == 'pull_request'
+              run: npm run lint
 
     test:
         runs-on: ubuntu-latest
