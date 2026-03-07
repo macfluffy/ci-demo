@@ -12,6 +12,11 @@ on:
                     - test
                     - prod
 
+            target_env_github:
+                description: 'Target environment from Github'
+                type: environment
+                required: true
+
             version:
                 description: "Deployment version"
                 type: string
