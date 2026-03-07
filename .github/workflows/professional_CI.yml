@@ -43,3 +43,30 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - run: echo "Building application..."
+
+    build-image:
+        needs: [lint, test]
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Check Docker Version
+              run: docker --version
+
+            - name: Inspect environment
+              run: |
+                uname -a
+                node -v
+                docker --version
+
+            - name: Build docker image
+              run: docker build -t sum-app .
+
+            - name: Save docker image
+              run: docker save sum-app > sum-image.tar
+
+            - uses: actions/artifact@v7.0.0
+              with:
+                name: docker_image
+                path: sum-image.tar
