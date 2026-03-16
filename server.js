@@ -2,8 +2,11 @@ const express = require("express");
 const sum = require("./sum");
 
 const app = express();
+// eslint-disable-next-line no-undef
 const VERSION = process.env.APP_VERSION || "v1";
+// eslint-disable-next-line no-undef
 const NAME = process.env.APP_NAME || "sum-service";
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;
 
 // URL/sum?a=1&b=2
