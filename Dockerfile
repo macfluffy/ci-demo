@@ -1,4 +1,4 @@
-from node:24
+from node:25-alpine
 
 WORKDIR /app
 
@@ -8,4 +8,4 @@ RUN npm ci
 
 COPY . .
 
-CMD ["npm", "test"]
+CMD ["npm", "run"]
