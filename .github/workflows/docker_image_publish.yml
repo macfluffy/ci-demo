@@ -42,3 +42,47 @@ jobs:
                 push: true
                 tags: ${{steps.meta.outputs.tags}}
                 labels: ${{steps.meta.outputs.labels}}
+
+    deploy:
+        needs: build-and-push-image
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+
+        env:
+            AWS_REGION: ap-southeast-2
+            ECS_CLUSTER: AutomatedDeploymentExample
+            ECS_SERVICE: AutomatedDeploymentService2
+            ECS_TASK_DEFINITION: task-definition.json
+            CONTAINER_NAME: sum-container
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v6.0.0
+              with:
+                aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+                aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+                aws-region: ${{env.AWS_REGION}}
+                
+            - name: Verify AWS Identity
+              run: aws sts get-caller-identity
+
+            - name: Fill in the new image ID in the Amazon ECS task definition
+              id: task-def
+              uses: aws-actions/amazon-ecd-render-task-definition@v1
+              with:
+                task-definition: ${{env.ECS_TASK_DEFINITION}}
+                container-name: ${{env.CONTAINER_NAME}}
+                image: ghcr.io/${{github.actor}}/${{github.repository}}:sha-${{github.sha}}
+
+            - name: Deploy Amazon ECS task definition
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+              with:
+                task-definition: ${{ steps.task-def.outputs.task-definition }}
+                service: ${{env.ECS_SERVICE}}
+                cluster: ${{env.ECS_CLUSTER}}
+                wait-for-service-stability: true
