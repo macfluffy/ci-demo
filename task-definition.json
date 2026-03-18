@@ -1,0 +1,52 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:ap-southeast-2:775964394906:task-definition/jun25-ci-cd-demo:1",
+    "containerDefinitions": [
+        {
+            "name": "sum-container",
+            "image": "ghcr.io/<user>/<repo>:latest",
+            "repositoryCredentials": {
+                "credentialsParameter": "arn:aws:secretsmanager:ap-southeast-2:775964394906:secret:ci-demo-sercret-tGLeVI"
+            },
+            "cpu": 256,
+            "memory": 512,
+            "memoryReservation": 512,
+            "portMappings": [
+                {
+                    "name": "sum-container-3000-tcp",
+                    "containerPort": 3000,
+                    "hostPort": 3000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "PORT",
+                    "value": "3000"
+                },
+                {
+                    "name": "APP_NAME",
+                    "value": "sum-service"
+                },
+                {
+                    "name": "APP_VERSION",
+                    "value": "v1"
+                }
+            ]
+        }
+    ],
+    "family": "AutomatedDeploymentPracticeTask",
+    "executionRoleArn": "arn:aws:iam::775964394906:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 1,
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    }
+}
