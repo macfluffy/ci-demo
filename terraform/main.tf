@@ -12,6 +12,6 @@ terraform {
 provider "local" {}
 
 resource "local_file" "hello" {
-    filename = "hello.txt"
-    content = "Hello from Terraform!"
+    filename = var.file_name
+    content = var.file_content
 }
